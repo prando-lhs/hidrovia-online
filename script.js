@@ -1,4 +1,6 @@
-alert("Bem-vindo ao sistema de monitoramento de hidrovias! Atenção: esta é uma versão de demonstração. Criado por Leonardo Henrique Sampaio Prando, Marinheiro-RM2");
+
+
+alert("Bem-vindo ao sistema de monitoramento de hidrovias! Atenção: esta é uma versão de demonstração. Criado por Leonardo Henrique Sampaio Prando, Marinheiro-RM2.");
 
 /* ===================== Inicialização do mapa ===================== */
 const map = L.map('map', { zoomControl:true }).setView([-22.4955, -48.5715], 13);
@@ -10,16 +12,13 @@ const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
 // camada que representa o canal (polyline) — aproximação para demonstração
 // sequência de pontos que seguem o leito no trecho Barra Bonita → Jaú (aproximação)
 const canalCoords = [
-  [-22.4750, -48.5400],
-  [-22.4855, -48.5485],
-  [-22.4949, -48.5581],
-  [-22.5018, -48.5655],
-  [-22.5085, -48.5740],
-  [-22.5155, -48.5825],
-  [-22.5250, -48.5930]
+  [-22.501010, -48.569022],
+  [-22.501099, -48.570299],
+  [-22.501971, -48.573647],
+  [-22.502606, -48.575277],
+  [-22.503696, -48.579741],
+  [-22.504766, -48.583882]
 ];
-
-
 
 const canalLine = L.polyline(canalCoords, { color:'#1e90ff', weight:5, opacity:0.5 }).addTo(map);
 
@@ -37,8 +36,9 @@ let boiasAprox = [
   { id:'BCV-158A', nome:'BCV-158A', tipo:'EB', estado:'Boa', lat:-22.501971, lng:-48.573647 },
   { id:'B-BB-10', nome:'BB-10', tipo:'BB', estado:'Boa', lat:-22.502606, lng:-48.575277 },
   { id:'B-ESP-01', nome:'ESP-01', tipo:'ESP', estado:'Boa', lat:-22.503696, lng:-48.579741 },
-  { id:'B-ESP-02', nome:'ESP-02', tipo:'ESP', estado:'Boa', lat:-22.500940, lng:-48.567338 }
+  { id:'B-ESP-02', nome:'ESP-02', tipo:'ESP', estado:'Boa', lat:-22.504766, lng:-48.583882},
 ];
+
 
 // carregar relatos do localStorage (mantemos protótipo)
 let relatos = JSON.parse(localStorage.getItem('relatos')||'null') || [
@@ -188,6 +188,31 @@ document.getElementById('btnSalvar').onclick = function(){
 /* botão re-snap (forçar re-alinhamento) */
 document.getElementById('btnSnap').onclick = function(){ renderBoias(); toast('Re-snap realizado.'); };
 
+/* ===================== Reportar problema na boia ===================== */
+
+function openReportFormAt(latlng, tipoPredefinido = 'ANOMALIA', tituloPredefinido = '') {
+    // 1. Ativa o modo de adição
+    addMode = true; 
+    
+    // 2. Armazena as coordenadas
+    selectedLatLng = L.latLng(latlng[0], latlng[1]);
+    
+    // 3. Exibe o formulário
+    document.getElementById('formWrap').style.display = 'block';
+    
+    // 4. Preenche as coordenadas no formulário
+    document.getElementById('selLatLng').textContent = `${selectedLatLng.lat.toFixed(6)}, ${selectedLatLng.lng.toFixed(6)}`;
+    
+    // 5. Preenche os campos do formulário com os valores predefinidos
+    document.getElementById('tipo').value = tipoPredefinido;
+    document.getElementById('titulo').value = tituloPredefinido;
+    document.getElementById('descricao').value = ''; // Limpa a descrição
+    document.getElementById('gravidade').value = 'MEDIA'; // Define a gravidade padrão
+    
+    // 6. Mensagem para o usuário
+    toast(`Formulário de relato ativado. Coordenadas da boia: ${selectedLatLng.lat.toFixed(6)}, ${selectedLatLng.lng.toFixed(6)}`);
+}
+
 /* ===================== Validação de relatos ===================== */
 function validarRelato(id, persiste){
   const idx = relatos.findIndex(r=>r.id===id);
@@ -248,7 +273,6 @@ if (navigator.geolocation) {
         },
         (err) => {
             console.error("Erro ao obter localização:", err);
-            alert("Não foi possível acessar o GPS.");
         },
         {
             enableHighAccuracy: true,
@@ -293,3 +317,4 @@ function convertUtmList(list, eastKey='easting', northKey='northing', zone='22S'
   });
   return converted;
 }
+
