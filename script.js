@@ -1,4 +1,4 @@
-console.log("Bem-vindo ao sistema de monitoramento de hidrovias! Atenção: esta é uma versão de demonstração. Criado por Leonardo Henrique Sampaio Prando, Marinheiro-RM2");
+alert("Bem-vindo ao sistema de monitoramento de hidrovias! Atenção: esta é uma versão de demonstração. Criado por Leonardo Henrique Sampaio Prando, Marinheiro-RM2");
 
 /* ===================== Inicialização do mapa ===================== */
 const map = L.map('map', { zoomControl:true }).setView([-22.4955, -48.5715], 13);
@@ -36,7 +36,8 @@ let boiasAprox = [
   { id:'BCV-158', nome:'BCV-158', tipo:'EB', estado:'Boa', lat:-22.501099, lng:-48.570299 },
   { id:'BCV-158A', nome:'BCV-158A', tipo:'EB', estado:'Boa', lat:-22.501971, lng:-48.573647 },
   { id:'B-BB-10', nome:'BB-10', tipo:'BB', estado:'Boa', lat:-22.502606, lng:-48.575277 },
-  { id:'B-ESP-01', nome:'ESP-01', tipo:'ESP', estado:'Boa', lat:-22.503696, lng:-48.579741 }
+  { id:'B-ESP-01', nome:'ESP-01', tipo:'ESP', estado:'Boa', lat:-22.503696, lng:-48.579741 },
+  { id:'B-ESP-02', nome:'ESP-02', tipo:'ESP', estado:'Boa', lat:-22.500940, lng:-48.567338 }
 ];
 
 // carregar relatos do localStorage (mantemos protótipo)
